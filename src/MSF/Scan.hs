@@ -4,6 +4,7 @@
 -- /db_nmap (tcpSynScan <> tcpConnectScan)/
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE KindSignatures #-}
+{-# LANGUAGE CPP #-}
 
 module MSF.Scan (
     db_nmap
@@ -69,7 +70,16 @@ newtype NmapOptions s = NmapOptions
 
 instance QuietCxt s => Monoid (NmapOptions s) where
   mempty      = NmapOptions ""
+#if __GLASGOW_HASKELL__ <= 802
   mappend l r = NmapOptions (getNmapOptions l ++ " " ++ getNmapOptions r)
+#endif
+
+#if __GLASGOW_HASKELL__ > 802
+instance QuietCxt s => Semigroup (NmapOptions s) where
+    NmapOptions "" <> r = r
+    l <> NmapOptions "" = l
+    l <> r = NmapOptions (getNmapOptions l ++ " " ++ getNmapOptions r)
+#endif
 
 -- | User-supplied arguments to nmap are assumed to be loud by default.
 customScan :: LoudCxt s => String -> NmapOptions s
