@@ -106,7 +106,7 @@ Executable exploit
                                process      >= 1.1,
                                directory    >= 1.2,
                                monadLib     >= 3.7.1,
-                               MSFHaskell
+                               msf-haskell
   else
           Buildable:           False
 
@@ -121,5 +121,5 @@ test-suite tests
                        test-framework             >= 0.8,
                        test-framework-quickcheck2 >= 0.3,
                        QuickCheck                 >= 2.5.1,
-                       MSFHaskell
+                       msf-haskell
   other-modules:       Tests.MsgPack
